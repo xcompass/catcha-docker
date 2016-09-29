@@ -18,3 +18,19 @@ services:
       - "./.data/app:/usr/local/tomcat/webapps/ROOT/uploads"
     ports:
       - "8080:8080"
+    restart: always
+  loris:
+    image: ubcctlt/loris-docker
+    volumes:
+      - "./.data/images:/usr/local/share/images"
+    ports:
+      - "5004:5004"
+    restart: always
+#  iiif:
+#    image: klokantech/iiifserver-iipimage-jpeg2000:latest
+#    volumes:
+#      - "./.data/images:/dropzone/"
+#      - "./.data/iiif:/data/"
+#    ports:
+#      - "5044:80"
+#    restart: always
