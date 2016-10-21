@@ -11,7 +11,8 @@ services:
       MYSQL_USER: catch
       MYSQL_PASSWORD: catch
   app:
-    image: compass/catcha:0.5.12
+    build: .
+    image: compass/catcha-prod
     depends_on:
       - db
     volumes:

@@ -1,0 +1,21 @@
+language: generic
+dist: trusty
+sudo: required
+services:
+- docker
+
+env:
+  global:
+    # DOCKER_USER
+    - secure: "S80gq8D8zcGOOoQkmXhYbIwho8J3fIO8hThjngbgermF+EwT+ILOymZcIdOXfKpPzcFb1hmQ1c/yjM9BJsJZvnV72e+sJNU1K7vV1evM7PYTvY7Y8AFi/mPThG/NaqQ7DrkjFQVlRumUb3+bhZCPtT+MEMtE7+pXMqOvC3ocJL1RhKoMW+ewQTsdw9rOBqv5WcHgM26RCA/32ul8J626Dq0IiAnw6n9NqMkBT7WF7YL5e+zt62lRatkoMDVa0R+F3PPSuqW8lNfZjvMcx+93lJjPhu5gr44WH8KWQCoKAzqQFzutMvW38VPEgH6kW+yGt0YeP27ewIBC9wszQw/vR25fLuIfT1wlfMJhjGR578EYC/5N7uJfU9PGPsNOE1EHAfEog4DVh4SbA5l6cgtEiqoy4AWQwCTHygCJXZkqcuhheeKdfW6XVrJVBloerwyNmHpXiR++9ebaAtx3d0Qcg5CdDxYTZkNX2ayFRXSWnWHfUcC+fPoeVmIRNLXG3XF9ZA1R8R5w++ExlMX/R2XUb1qD38N96mJan4bXwzyXCED7XtLv4vmTjL8gWyfiowazBOzmLYxot2uy7WaYhC7OmW4OnX6M7jkE/Ibk+RG7zc86OKmKtzR3tmIJqUTsGe2WqoP8LOW9mVmLvkN5UIl5DVxKZY4EK18e9QAs7LgFdvM="
+    # DOCKER_PASS
+    - secure: "g1BioYQqGkQRA3o0I4vhbSqWRhrpnQilxjMxjzw5FCbIkmPvAKDCciEnLUQ7AgY9gPjFiTtGHQcbii7fSUclfkXIx+ibOmHNY9/i3T4AEOlMzNSCZap3TFAcH+IVGCWMJsOfJL269UUAQax6dXVkz07yOWZUxZNs7a7wSQqk6DHxy+mYV/Ows06Zyk6hln7jI4RVcc19RT3focIYq8L7xdgkBj9KSkK8cY3eOZFUzthBZvkttkTSjXpgHg/5DV3j3ETtyBa9iJyQFzmC3fl6JFfiA1Rg+ypkzVZqqpVWMesviwk7FFOicTqqEiKi8gtjj7kJR9G9Dsdh5tJLxXFX4cLqPrZRJ1+bIXwdtg4QrOhySHnLdExd5XPTA5e2S3aDXSUVM0p9DOFOdSL148jrl3zH9gY/KQ7I12Nm0+2JeRAioUJPh3UCsn7ByjMknatQF2tG8p7qasH7L50kMPXdBK0RM4xdT93Ju/U5ZB6ec3c45eW09V2Wtcceq1XJ0yRnM0gUsg/6qmGT3gIPEPuhV5c242ORcjZyPIyfH9JjgSY2x4z6jWUKiwQd4zHkh/Dsg0ziivZ+ehui/4b4YPQ8GXveM2BB+j2MpsovV3LtzhFkdz3gftzUj7KgK/WjTnwLqztQknHDnJragPWb3jJgHhS9rvuS0pi3tDIVTV7j3cE="
+
+before_install:
+- docker run --rm -v `pwd`:/app/war compass/catcha grails war war/catcha.war
+- docker build -t compass/catcha-prod .
+
+after_success:
+- docker tag compass/catcha-prod compass/catcha-prod:latest
+- docker login -u $DOCKER_USER -p $DOCKER_PASS
+- docker push compass/catcha-prod
